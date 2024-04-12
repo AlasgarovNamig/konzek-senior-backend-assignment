@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  labels:
+    app: auth
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: auth-deployment
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth-service
+          image: localhost:32000/auth-service:latest
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: default-secret
+          resources:
+            limits:
+              cpu: "0.2"
+            requests:
+              cpu: "0.1"
+          ports:
+            - containerPort: 7000
+              name: http
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: auth

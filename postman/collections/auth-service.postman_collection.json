@@ -1,0 +1,278 @@
+{
+	"info": {
+		"_postman_id": "1cd85fdb-004d-4249-93df-88fc698e7773",
+		"name": "auth-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14940955"
+	},
+	"item": [
+		{
+			"name": "Register User By Admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\": \"Test User 001\",\n    \"password\": \"password001\",\n    \"firstName\": \"Test001\",\n    \"lastName\": \"Testov001\",\n    \"email\": \"testovtest001@gmail.com\",\n    \"mobileNumber\": \"+994 515459556\",\n    \"userRoles\": [\n        \"product_read_all\",\n        \"product_detail\",\n        \"product_create\",\n        \"category_detail\",\n        \"category_create\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{auth-service-base-url}}/api/v1/auth/user-registration-by-admin",
+					"host": [
+						"{{auth-service-base-url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"user-registration-by-admin"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register User By Admin with All Role",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"Test User Name 001\",\n    \"password\": \"password001\",\n    \"firstName\": \"Test001\",\n    \"lastName\": \"Testov001\",\n    \"email\": \"testovtest001@gmail.com\",\n    \"mobileNumber\": \"+994 515459556\",\n    \"userRole\": [\n        \"product_read_all\",\n        \"product_detail\",\n        \"product_create\",\n        \"category_detail\",\n        \"category_create\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Client Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "product-catalog-service",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "6yzpjcfA2PO6WZb6FYAD6THRuczBdQUc",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{keycloak-base-url}}/realms/konzek-realm/protocol/openid-connect/token",
+					"host": [
+						"{{keycloak-base-url}}"
+					],
+					"path": [
+						"realms",
+						"konzek-realm",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Token'ı Environment Variable olarak kaydet\", function () {",
+							"    var responseData = pm.response.json();",
+							"    pm.environment.set(\"user_jwt\", responseData.access_token);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "auth-service",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "j1ajW7jjzs4jLshY9OlagOn2hrJ27AN1",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "test user 001",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password001",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{keycloak-base-url}}/realms/konzek-realm/protocol/openid-connect/token",
+					"host": [
+						"{{keycloak-base-url}}"
+					],
+					"path": [
+						"realms",
+						"konzek-realm",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Token'ı Environment Variable olarak kaydet\", function () {",
+							"    var responseData = pm.response.json();",
+							"    pm.environment.set(\"admin_jwt\", responseData.access_token); ",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "admin-cli",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{keycloak-base-url}}/realms/master/protocol/openid-connect/token",
+					"host": [
+						"{{keycloak-base-url}}"
+					],
+					"path": [
+						"realms",
+						"master",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Prometheus Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{auth-service-base-url}}/metrics",
+					"host": [
+						"{{auth-service-base-url}}"
+					],
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "admin_jwt",
+			"value": ""
+		}
+	]
+}

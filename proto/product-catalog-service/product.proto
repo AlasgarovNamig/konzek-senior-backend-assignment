@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package product;
+option go_package = "./;product";
+
+import "google/api/annotations.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
+
+
+enum SearchOperator {
+  EQUAL = 0;
+  NOT_EQUAL = 1;
+  GREATER_THAN = 2;
+  LESS_THAN = 3;
+  GREATER_THAN_EQUAL = 4;
+  LESS_THAN_EQUAL = 5;
+}
+
+
+enum MatchType {
+  AND = 0;
+  OR = 1;
+}
+
+service ProductCatalogService {
+
+  rpc SearchProduct(SearchRequest) returns (SearchProductResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/product/search"
+      body: "*"
+    };
+  }
+
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/product"
+      body: "*"
+    };
+  }
+
+  rpc GetProductById(GetProductByIdRequest) returns (GetProductByIdResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/product/{productId}"
+    };
+  }
+
+}
+
+
+
+message CreateProductRequest {
+  string name = 1;
+  double price = 2 [(validator.field) = {float_gt: 0}];
+  int64 categoryId = 3;
+}
+
+message CreateProductResponse {
+  Result result = 1;
+}
+
+message SearchField {
+  string fieldName = 1;
+  int64 searchIntData = 2;
+  double searchDecimalData = 3;
+  string searchStringData = 4;
+  SearchOperator searchOperator = 5;
+  MatchType matchType = 6;
+}
+
+message SearchRequest {
+  repeated SearchField searchFields = 1;
+  int64 page = 2;
+  int64 limit = 3;
+}
+
+message Product{
+  int64 id = 1;
+  string name = 2;
+  double price = 3;
+  Category category = 4;
+}
+
+message Category {
+  int64 id = 1;
+  string name = 2;
+}
+
+message SearchProductResponse {
+  repeated Product productList = 1;
+  Result result = 2;
+}
+
+message GetProductByIdRequest{
+  string productId = 1;
+}
+message GetProductByIdResponse{
+  Product product = 1;
+  Result result = 2;
+}
+
+message Result{
+  bool isSuccess = 1;
+  string statusCode = 2;
+  string message = 3;
+  string error = 4;
+}

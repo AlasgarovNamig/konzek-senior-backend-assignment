@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package category;
+option go_package = "./;category";
+
+import "google/api/annotations.proto";
+
+enum SearchOperator {
+  EQUAL = 0;
+  NOT_EQUAL = 1;
+  GREATER_THAN = 2;
+  LESS_THAN = 3;
+  GREATER_THAN_EQUAL = 4;
+  LESS_THAN_EQUAL = 5;
+}
+
+
+enum MatchType {
+  AND = 0;
+  OR = 1;
+}
+
+service ProductCategoryService {
+
+  rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/category"
+      body: "*"
+    };
+  }
+
+
+  //  rpc GetCategoryById(GetCategoryByIdRequest) returns (GetCategoryByIdResponse) {
+  //    option (google.api.http) = {
+  //      get: "/api/v1/category/{categoryId}"
+  //    };
+  //  }
+
+  rpc SearchCategories (SearchRequest) returns (SearchCategoryResponse){
+    option (google.api.http) = {
+      post: "/api/v1/category/search"
+      body: "*"
+    };
+  }
+
+}
+
+
+message CreateCategoryRequest {
+  string name = 1;
+}
+
+message CreateCategoryResponse {
+  Result result = 1;
+}
+
+message SearchField {
+  string fieldName = 1;
+  int64 searchIntData = 2;
+  double searchDecimalData = 3;
+  string searchStringData = 4;
+  SearchOperator searchOperator = 5;
+  MatchType matchType = 6;
+}
+
+message SearchRequest {
+  repeated SearchField searchFields = 1;
+  int64 page = 2;
+  int64 limit = 3;
+}
+
+
+message CategoryDto {
+  int64 id = 1;
+  string name = 2;
+  string createdAt = 3;
+}
+
+
+message SearchCategoryResponse {
+  repeated CategoryDto categoryDtoList = 1;
+  Result result = 2;
+}
+
+message Result{
+  bool isSuccess = 1;
+  string statusCode = 2;
+  string message = 3;
+  string error = 4;
+}
+//message GetCategoryByIdRequest{
+//  string categoryId = 1;
+//}
+//message GetCategoryByIdResponse{
+//  CategoryDto category = 1;
+//  Result result = 2;
+//}
+//
+//message CategoryDto {
+//  int64 id = 1;
+//  string name = 2;
+//  string createdAt = 3;
+//}
+

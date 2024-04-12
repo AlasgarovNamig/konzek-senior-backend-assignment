@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "d8d35851-e9bf-4ebb-9be1-98981a794b1b",
+		"name": "product-catalog-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14940955"
+	},
+	"item": [
+		{
+			"name": "Create Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Acer Laptop\",\n    \"price\":5.68,\n    \"categoryId\":1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{product-catalog-service-base-url}}/api/v1/product",
+					"host": [
+						"{{product-catalog-service-base-url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"searchFields\": [\n    {\n      \"fieldName\": \"id\",\n      \"searchIntData\": 1,\n      \"searchOperator\": 0\n    },\n    {\n      \"fieldName\": \"category_id\",\n      \"searchIntData\": 8,\n      \"searchOperator\": 0, \n      \"matchType\": 1 \n    }\n  ],\n  \"page\": 1,\n  \"limit\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{product-catalog-service-base-url}}/api/v1/product/search",
+					"host": [
+						"{{product-catalog-service-base-url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get By Id Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{product-catalog-service-base-url}}/api/v1/product/1",
+					"host": [
+						"{{product-catalog-service-base-url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"product",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Prometheus Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{product-catalog-service-base-url}}/metrics",
+					"host": [
+						"{{product-catalog-service-base-url}}"
+					],
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

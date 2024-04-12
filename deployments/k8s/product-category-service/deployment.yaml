@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-categories-deployment
+  labels:
+    app: product-categories
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: product-categories-deployment
+      labels:
+        app: product-categories
+    spec:
+      containers:
+        - name: product-categories-service
+          image: localhost:32000/product-categories-service:latest
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: default-secret
+          resources:
+            limits:
+              cpu: "0.2"
+            requests:
+              cpu: "0.1"
+          ports:
+            - containerPort: 8000
+              name: http
+            - containerPort: 8001
+              name: grpc
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: product-categories

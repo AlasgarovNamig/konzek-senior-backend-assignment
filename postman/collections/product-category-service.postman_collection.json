@@ -1,0 +1,104 @@
+{
+	"info": {
+		"_postman_id": "a750f622-7ad8-4abe-96fa-6a7905d99541",
+		"name": "product-category-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14940955"
+	},
+	"item": [
+		{
+			"name": "Create Category",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Electronics\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{product-category-service-base-url}}/api/v1/category",
+					"host": [
+						"{{product-category-service-base-url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Category",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"searchFields\": [\n    {\n      \"fieldName\": \"id\",\n      \"searchIntData\": 1,\n      \"searchOperator\": 0\n    },\n    {\n      \"fieldName\": \"name\",\n      \"searchStringData\": \"Electronics\",\n      \"searchOperator\": 0, \n      \"matchType\": 0 \n    }\n  ],\n  \"page\": 1,\n  \"limit\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{product-category-service-base-url}}/api/v1/category/search",
+					"host": [
+						"{{product-category-service-base-url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"category",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Prometheus Metrics Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{product-category-service-base-url}}/metrics",
+					"host": [
+						"{{product-category-service-base-url}}"
+					],
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
